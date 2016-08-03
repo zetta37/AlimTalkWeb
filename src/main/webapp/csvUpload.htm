@@ -1,0 +1,24 @@
+<html>
+    <head>
+       <title>Kakao Games Alimtalk Uploader</title>
+    </head>
+    <body bgcolor="#ffff00">
+        <h3>Kakao Games Alimtalk Uploader</h3>
+        <fieldset>
+            Select a csv file to upload: <br />
+            <form action="UploadServlet" method="post" enctype="multipart/form-data">
+                <input type="file" name="csvFile" accept="text/csv"><br><br>
+
+                TEMP_CD: <input type="text" name="temp_cd" align="right"/><br>
+                SMS_SND_NUM: <input type="text" name="sms_snd_num" align="right"/><br>
+                REQ_DTM: <input type="text" name="req_dtm" align="right"/><br>
+                PRE_ORDER_ID: <input type="text" name="pre_order_id" align="right"/>
+        </fieldset>
+        <br>
+        <input type="submit" value="Upload" />
+
+
+        </form>
+    </body>
+
+</html>
