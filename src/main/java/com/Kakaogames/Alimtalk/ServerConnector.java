@@ -6,6 +6,8 @@
 
 package com.Kakaogames.Alimtalk;
 
+import com.sun.tools.internal.xjc.reader.xmlschema.bindinfo.BIConversion;
+
 import java.io.BufferedReader;
 import java.sql.Connection;
 import java.sql.Driver;
@@ -18,7 +20,7 @@ public class ServerConnector {
     ConnectionInfo preOrderServer;
     ConnectionInfo alimTalkServer;
 
-    public ServerConnector(BufferedReader br){
+    public ServerConnector(BufferedReader br, UserInputInfo usrInputInfo){
 
 //        Scanner userInput = new Scanner(System.in);
 //        System.out.println( "\n   =========================================" +
@@ -50,7 +52,7 @@ public class ServerConnector {
                 = new ConnectionInfo("jdbc:mysql://10.30.143.54:3306/test", "gametest", "gametestpw");
 //        System.out.println("### DONE...!!");
 
-        this.cvt = new CSVConverter(br);
+        this.cvt = new CSVConverter(br, usrInputInfo);
 
     }
 

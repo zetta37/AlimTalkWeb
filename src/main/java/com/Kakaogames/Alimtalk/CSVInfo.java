@@ -7,14 +7,14 @@ package com.Kakaogames.Alimtalk;
 
 class CSVInfo {
 
-    private String SENDER_KEY;
-    private String CHANNEL;
+    private final String SENDER_KEY = "8f67c73164660c66fa89eb70ccc2826b0de8f802";
+    private final String CHANNEL = "A";
+    private final String SMS_SND_YN = "Y";
+    private final String TRAN_STS = "1";
     private String PHONE_NUM;
     private String TMPL_CD;
     private String SMS_SND_NUM;
     private String REQ_DTM;
-    private String SMS_SND_YN;
-    private String TRAN_STS;
     private String MEMBER_ID;
     private String COUPON_NO;
     private String SND_MSG;
@@ -27,12 +27,7 @@ class CSVInfo {
 
     //Getter
 
-//    public String getSENDER_KEY() {
-//        return SENDER_KEY;
-//    }
-//    public String getCHANNEL() {
-//        return CHANNEL;
-//    }
+
 //    public String getPHONE_NUM() {
 //        return PHONE_NUM;
 //    }
@@ -54,9 +49,9 @@ class CSVInfo {
 //    public String getMEMBER_ID() {
 //        return MEMBER_ID;
 //    }
-//    public String getCOUPON_NO() {
-//        return COUPON_NO;
-//    }
+    public String getCOUPON_NO() {
+        return COUPON_NO;
+    }
 //    public String getSND_MSG() {
 //        return SND_MSG;
 //    }
@@ -69,12 +64,6 @@ class CSVInfo {
 
 
     //Setter
-    void setSENDER_KEY(String SENDER_KEY) {
-        this.SENDER_KEY = SENDER_KEY;
-    }
-    void setCHANNEL(String CHANNEL) {
-        this.CHANNEL = CHANNEL;
-    }
     void setPHONE_NUM(String PHONE_NUM) {
         this.PHONE_NUM = PHONE_NUM;
     }
@@ -86,12 +75,6 @@ class CSVInfo {
     }
     void setREQ_DTM(String REQ_DTM) {
         this.REQ_DTM = REQ_DTM;
-    }
-    void setSMS_SND_YN(String SMS_SND_YN) {
-        this.SMS_SND_YN = SMS_SND_YN;
-    }
-    void setTRAN_STS(String TRAN_STS) {
-        this.TRAN_STS = TRAN_STS;
     }
     void setMEMBER_ID(String MEMBER_ID) {
         this.MEMBER_ID = MEMBER_ID;

@@ -5,26 +5,24 @@
 package com.Kakaogames.Alimtalk;
 
 import java.io.BufferedReader;
-import java.io.File;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
 class CSVConverter {
 
-    private File csvFile;
     private ArrayList<CSVInfo> csvTable;
 
-    CSVConverter(BufferedReader br) {
+    CSVConverter(BufferedReader br, UserInputInfo usrInputInfo) {
 
         try {
             String str;
             String[] token;
             this.csvTable = new ArrayList<CSVInfo>();
             CSVInfo csvData;
-            while(br.readLine().equals("\n")){
-                br.readLine();
+            while(br.readLine().equals("Content-Type: text/csv")){
             }
+            br.readLine();
 
             while ((str = br.readLine()) != null){
 
@@ -33,35 +31,23 @@ class CSVConverter {
 
                 for (int i=0; i<token.length; i++){
                     switch(i){
-//                        case 1:
-//                            csvData.setSENDER_KEY(token[0]);
-//                        case 2:
-//                            csvData.setCHANNEL(token[1]);
+                        case 1:
+                            csvData.setPHONE_NUM(token[0]);
+                        case 2:
+                            csvData.setMEMBER_ID(token[1]);
                         case 3:
-                            csvData.setPHONE_NUM(token[2]);
-//                        case 4:
-//                            csvData.setTMPL_CD(token[3]);
-//                        case 5:
-//                            csvData.setSMS_SND_NUM(token[4]);
-//                        case 6:
-//                            csvData.setREQ_DTM(token[5]);
-//                        case 7:
-//                            csvData.setSMS_SND_YN(token[6]);
-//                        case 8:
-//                            csvData.setTRAN_STS(token[7]);
-                        case 9:
-                            csvData.setMEMBER_ID(token[8]);
-                        case 10:
-                            csvData.setCOUPON_NO(token[9]);
-//                        case 11:
-//                            csvData.setSND_MSG(token[10]);
-                        case 12:
-                            csvData.setUserid(token[11]);
-//                        case 13:
-//                            csvData.setPre_order_id(token[12]);
+                            csvData.setCOUPON_NO(token[2]);
+                        case 4:
+                            csvData.setUserid(token[3]);
                         default:
                     }
                 }
+
+                csvData.setTMPL_CD(usrInputInfo.getTmpl_cd());
+                csvData.setSMS_SND_NUM(usrInputInfo.getSms_snd_num());
+                csvData.setREQ_DTM(usrInputInfo.getReq_dtm());
+                csvData.setPre_order_id(usrInputInfo.getPre_order_id());
+                csvData.setSND_MSG(replaceCouponNum(usrInputInfo, csvData));
 
                 csvTable.add(csvData);
             }
@@ -70,6 +56,12 @@ class CSVConverter {
             System.out.println("** Failure -- File/Directroy Not Found");
         }
 
+    }
+
+    String replaceCouponNum (UserInputInfo usrInputInfo, CSVInfo csvData){
+        String sndMsg = usrInputInfo.getSnd_msg();
+        sndMsg.replace("#{쿠폰번호}", csvData.getCOUPON_NO());
+        return  sndMsg;
     }
 
     void queryProcessor(java.sql.Statement statement, String dbName) {
