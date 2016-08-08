@@ -7,10 +7,10 @@
 package com.Kakaogames.Alimtalk;
 
 import com.sun.tools.internal.xjc.reader.xmlschema.bindinfo.BIConversion;
+import org.apache.catalina.realm.UserDatabaseRealm;
 
 import java.io.BufferedReader;
 import java.sql.Connection;
-import java.sql.Driver;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 
@@ -20,7 +20,7 @@ public class ServerConnector {
     ConnectionInfo preOrderServer;
     ConnectionInfo alimTalkServer;
 
-    public ServerConnector(BufferedReader br, UserInputInfo usrInputInfo){
+    public ServerConnector(BufferedReader br, UserInputInfo userInputInfo){
 
 //        Scanner userInput = new Scanner(System.in);
 //        System.out.println( "\n   =========================================" +
@@ -47,16 +47,14 @@ public class ServerConnector {
 
         alimTalkServer
                 = new ConnectionInfo("jdbc:mysql://10.28.162.153:3306/test", "cuser", "cuserpw");
-//        System.out.println("### Preorder Server...");
+
         preOrderServer
                 = new ConnectionInfo("jdbc:mysql://10.30.143.54:3306/test", "gametest", "gametestpw");
-//        System.out.println("### DONE...!!");
 
-        this.cvt = new CSVConverter(br, usrInputInfo);
-
+        this.cvt = new CSVConverter(br, userInputInfo);
     }
 
-    public void doServerConnect(){
+    public void connectServer(){
 
         try {
 
@@ -85,7 +83,6 @@ public class ServerConnector {
             System.out.println("# COMPLETE: 사전알림신청내역 Server Query INSERT");
 
             System.out.println("\nTerminating Process... Bye");
-
 
         } catch (SQLException sqlExpt) {
             System.out.println("** FAILURE: SQLException --  " + sqlExpt.getMessage());
