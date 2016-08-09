@@ -6,9 +6,6 @@
 
 package com.Kakaogames.Alimtalk;
 
-import com.sun.tools.internal.xjc.reader.xmlschema.bindinfo.BIConversion;
-import org.apache.catalina.realm.UserDatabaseRealm;
-
 import java.io.BufferedReader;
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -21,29 +18,6 @@ public class ServerConnector {
     ConnectionInfo alimTalkServer;
 
     public ServerConnector(BufferedReader br, UserInputInfo userInputInfo){
-
-//        Scanner userInput = new Scanner(System.in);
-//        System.out.println( "\n   =========================================" +
-//                            "\n            AlimTalk Module v.1.0.0         "+
-//                            "\n\n    KakaoGamesCorp                        "+
-//                            "\n    PC Platform Dev. Team                 "+
-//                            "\n   =========================================");
-//
-//        System.out.println();
-//        System.out.print("Enter \"사전알림신청내역\" Server Connection Info (SYNTAX: url id pw)\n    -> ");
-//        String input = userInput.nextLine();
-//        String[] serverInfo = input.split(" ");
-//
-//        final ConnectionInfo preOrderServer
-//                  = new ConnectionInfo("jdbc:mysql://"+serverInfo[0], serverInfo[1], serverInfo[2]);
-//
-//        System.out.print("Enter \"알림톡\" Server Connection Info (SYNTAX: url id pw)\n    -> ");
-//        input = userInput.nextLine();
-//        serverInfo = input.split(" ");
-//
-//        final ConnectionInfo alimTalkServer
-//                 = new ConnectionInfo("jdbc:mysql://"+serverInfo[0], serverInfo[1], serverInfo[2]);
-//        System.out.println("### Alimtalk Server...");
 
         alimTalkServer
                 = new ConnectionInfo("jdbc:mysql://10.28.162.153:3306/test", "cuser", "cuserpw");
@@ -66,10 +40,11 @@ public class ServerConnector {
                     preOrderServer.getIP(),
                     preOrderServer.getID(),
                     preOrderServer.getPwd());
+
             System.out.println("# CONNECTED: 사전알림신청내역 Server");
 
             java.sql.Statement state = conn.createStatement();
-            cvt.queryProcessor(state, "preOrderServer");
+            cvt.processQuery(state, "preOrderServer");
             System.out.println("# COMPLETE: 사전알림신청내역 Server Query INSERT");
 
             // 알림톡 연결 및 쿼리 INSERT
@@ -77,9 +52,11 @@ public class ServerConnector {
                     alimTalkServer.getIP(),
                     alimTalkServer.getID(),
                     alimTalkServer.getPwd());
+
             System.out.println("# CONNECTED: 알림톡 Server");
+
             state = conn.createStatement();
-            cvt.queryProcessor(state, "alimTalkServer");
+            cvt.processQuery(state, "alimTalkServer");
             System.out.println("# COMPLETE: 사전알림신청내역 Server Query INSERT");
 
             System.out.println("\nTerminating Process... Bye");

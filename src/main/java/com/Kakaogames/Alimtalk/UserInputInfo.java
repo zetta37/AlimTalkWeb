@@ -33,4 +33,18 @@ public class UserInputInfo {
     public String getSnd_msg(){
         return snd_msg;
     }
+
+//    public void setTmpl_cd(String str) {
+//        tmpl_cd = str;
+//    }
+//    public void setSms_snd_num(String str){
+//        sms_snd_num = str;
+//    }
+//    public void setReq_dtm(String str){ req_dtm = str; }
+//    public void setPre_order_id(String str){
+//        pre_order_id = str;
+//    }
+//    public void setSnd_msg(String str){
+//        snd_msg = str;
+//    }
 }

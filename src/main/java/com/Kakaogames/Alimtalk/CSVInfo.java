@@ -4,13 +4,14 @@ package com.Kakaogames.Alimtalk;
  * Created by mf839-005 on 2016. 7. 27..
  */
 
-
 class CSVInfo {
 
+    // 고정 값
     private final String SENDER_KEY = "8f67c73164660c66fa89eb70ccc2826b0de8f802";
     private final String CHANNEL = "A";
     private final String SMS_SND_YN = "Y";
     private final String TRAN_STS = "1";
+
     private String PHONE_NUM;
     private String TMPL_CD;
     private String SMS_SND_NUM;
@@ -22,46 +23,11 @@ class CSVInfo {
     private String pre_order_id;
 
     CSVInfo() {
-
     }
 
-    //Getter
-
-
-//    public String getPHONE_NUM() {
-//        return PHONE_NUM;
-//    }
-//    public String getTMPL_CD() {
-//        return TMPL_CD;
-//    }
-//    public String getSMS_SND_NUM() {
-//        return SMS_SND_NUM;
-//    }
-//    public String getREQ_DTM() {
-//        return REQ_DTM;
-//    }
-//    public String getSMS_SND_YN() {
-//        return SMS_SND_YN;
-//    }
-//    public String getTRAN_STS() {
-//        return TRAN_STS;
-//    }
-//    public String getMEMBER_ID() {
-//        return MEMBER_ID;
-//    }
     public String getCOUPON_NO() {
         return COUPON_NO;
     }
-//    public String getSND_MSG() {
-//        return SND_MSG;
-//    }
-//    public String getUserid() {
-//        return userid;
-//    }
-//    public String getPre_order_id() {
-//        return pre_order_id;
-//    }
-
 
     //Setter
     void setPHONE_NUM(String PHONE_NUM) {
@@ -92,13 +58,12 @@ class CSVInfo {
         this.pre_order_id = pre_order_id;
     }
 
-    String alimTalkColumnFormat() {
-        setMEMBER_ID("MEMBER_ID");
-        setCOUPON_NO("COUPON_NO");
-        return (SENDER_KEY + ", " + CHANNEL + ", " + PHONE_NUM + ", " + TMPL_CD + ", " + SMS_SND_NUM
-                + ", " + REQ_DTM + ", " + SMS_SND_YN + ", " + TRAN_STS + ", " + MEMBER_ID
-                + ", " + COUPON_NO + ", " + SND_MSG);
 
+    /*
+     아래 부분은 알림톡/사전알림 서버 내 테이블들 별로 다른 Column 형식을 맞추기 위해 Query string을 생성해 주는 파트
+     */
+    String alimTalkColumnFormat() {
+        return ("SENDER_KEY, CHANNEL, PHONE_NUM, TMPL_CD, SMS_SND_NUM, REQ_DTM, SMS_SND_YN, TRAN_STS, MEMBER_ID, COUPON_NO, SND_MSG");
     }
 
     String alimTalkDataFormat() {
@@ -108,9 +73,7 @@ class CSVInfo {
     }
 
     String preOrderColumnFormat() {
-        setMEMBER_ID("memberid");
-        setCOUPON_NO("coupon");
-        return (pre_order_id + ", " + userid + ", " + COUPON_NO + ", " + MEMBER_ID);
+        return ("pre_order_id, userid, coupon, memberid");
     }
 
     String preOrderDataFormat() {
