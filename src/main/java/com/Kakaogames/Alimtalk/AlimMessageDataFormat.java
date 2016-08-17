@@ -4,8 +4,10 @@ package com.Kakaogames.Alimtalk;
  * Created by mf839-005 on 2016. 7. 27..
  */
 
-class CSVInfo {
+class AlimMessageDataFormat {
 
+    static final String ALIMTALK_COLUMN= "SENDER_KEY, CHANNEL, PHONE_NUM, TMPL_CD, SMS_SND_NUM, REQ_DTM, SMS_SND_YN, TRAN_STS, MEMBER_ID, COUPON_NO, SND_MSG";
+    static final String PRE_ORDER_COLUMN  = "pre_order_id, userid, coupon, memberid";
     // 고정 값
     private final String SENDER_KEY = "8f67c73164660c66fa89eb70ccc2826b0de8f802";
     private final String CHANNEL = "A";
@@ -22,11 +24,17 @@ class CSVInfo {
     private String userid;
     private String pre_order_id;
 
-    CSVInfo() {
+    AlimMessageDataFormat() {
     }
 
     public String getCOUPON_NO() {
         return COUPON_NO;
+    }
+    public String getUserid() {return userid;}
+    public String getMEMBER_ID() { return MEMBER_ID;}
+
+    public String getPHONE_NUM() {
+        return PHONE_NUM;
     }
 
     //Setter
@@ -62,21 +70,14 @@ class CSVInfo {
     /*
      아래 부분은 알림톡/사전알림 서버 내 테이블들 별로 다른 Column 형식을 맞추기 위해 Query string을 생성해 주는 파트
      */
-    String alimTalkColumnFormat() {
-        return ("SENDER_KEY, CHANNEL, PHONE_NUM, TMPL_CD, SMS_SND_NUM, REQ_DTM, SMS_SND_YN, TRAN_STS, MEMBER_ID, COUPON_NO, SND_MSG");
-    }
 
-    String alimTalkDataFormat() {
+    String formAlimTalkDBTableData() {
         return ("'" + SENDER_KEY + "', '" + CHANNEL + "', '" + PHONE_NUM + "', '" + TMPL_CD
                 + "', '" + SMS_SND_NUM + "', '" + REQ_DTM + "', '" + SMS_SND_YN + "', '"
                 + TRAN_STS + "', '" + MEMBER_ID + "', '" + COUPON_NO + "', '" + SND_MSG + "'");
     }
 
-    String preOrderColumnFormat() {
-        return ("pre_order_id, userid, coupon, memberid");
-    }
-
-    String preOrderDataFormat() {
+    String formPreOrderDBTableData() {
         return ("'" + pre_order_id + "', '" + userid + "', '" + COUPON_NO + "', '" + MEMBER_ID+"'");
     }
 }
