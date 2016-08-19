@@ -3,14 +3,14 @@ package com.Kakaogames.Alimtalk;
 /**
  * Created by mf839-005 on 2016. 8. 3..
  */
-public class UserInputInfo {
+public class FixedAlimMsgInfo {
     private String tmpl_cd;
     private String sms_snd_num;
     private String req_dtm;
     private String pre_order_id;
     private String snd_msg;
 
-    public UserInputInfo(String tmpl_cd, String sms_snd_num, String req_dtm, String pre_order_id, String snd_msg){
+    public FixedAlimMsgInfo(String tmpl_cd, String sms_snd_num, String req_dtm, String pre_order_id, String snd_msg){
         this.tmpl_cd = tmpl_cd;
         this.sms_snd_num = sms_snd_num;
         this.req_dtm = req_dtm;
@@ -33,5 +33,4 @@ public class UserInputInfo {
     public String getSnd_msg(){
         return snd_msg;
     }
-
 }

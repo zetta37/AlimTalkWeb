@@ -10,17 +10,17 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 
-class AlimTalkDBConnectionManager{
+class PreOrderDBConnectionManager {
 
-    private static AlimTalkDBConnectionManager connectionManager;
+    private static PreOrderDBConnectionManager connectionManager;
     private static Connection conn;
-    private static String url = "jdbc:mysql://10.28.162.153:3306/";
+    private static String url = "jdbc:mysql://10.30.143.54:3306/";
 
     /* DB 사용자 id/pwd는 이부분에 입력*/
-    private static String id = "cuser";
-    private static String pwd = "cuserpw";
+    private static String id = "gametest";
+    private static String pwd = "gametestpw";
 
-    private AlimTalkDBConnectionManager() throws SQLException {
+    private PreOrderDBConnectionManager() throws SQLException {
         try {
             Class.forName("com.mysql.jdbc.Driver");
             conn = DriverManager.getConnection(url, id, pwd);
@@ -29,13 +29,13 @@ class AlimTalkDBConnectionManager{
         }
     }
 
-    public static AlimTalkDBConnectionManager getManager(){
+    public static PreOrderDBConnectionManager getManager(){
         return connectionManager;
     }
 
     public static Connection getConnection() throws SQLException {
         if (connectionManager == null) {
-            connectionManager = new AlimTalkDBConnectionManager();
+            connectionManager = new PreOrderDBConnectionManager();
         }
         return conn;
     }
@@ -48,5 +48,4 @@ class AlimTalkDBConnectionManager{
             System.out.println("            SQLState: " + sqlExpt.getSQLState());
         }
     }
-
 }

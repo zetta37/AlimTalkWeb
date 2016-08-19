@@ -4,13 +4,6 @@
 
 package com.Kakaogames.Alimtalk;
 
-import org.apache.poi.hssf.usermodel.HSSFCell;
-import org.apache.poi.hssf.usermodel.HSSFRow;
-import org.apache.poi.hssf.usermodel.HSSFSheet;
-import org.apache.poi.hssf.usermodel.HSSFWorkbook;
-import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
-import org.apache.poi.openxml4j.opc.OPCPackage;
-import org.apache.poi.poifs.filesystem.POIFSFileSystem;
 import org.apache.poi.xssf.usermodel.XSSFCell;
 import org.apache.poi.xssf.usermodel.XSSFRow;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
@@ -21,54 +14,46 @@ import java.util.ArrayList;
 
 class UserInputInfoManager {
 
-    private ArrayList<AlimMessageDataFormat> alimTalkMessageInfoTable;
+    private static ArrayList<AlimMsgData> alimMsgInfoTable;
+    private static UserInputInfoManager userInputInfoManager;
 
-
-    UserInputInfoManager(UserInputInfo fixedValue) throws IOException {
-
-        alimTalkMessageInfoTable = insertCouponInfo();
-        setFixedAlimTalkMessageInfo(fixedValue);
-
+    private UserInputInfoManager() throws IOException {
+        alimMsgInfoTable = PreOrderedUserListManager.getPreOrderedUserListManager().getPreOrderUserList();
     }
 
+    public static UserInputInfoManager getUserInputInfoManager() throws IOException {
+        if (userInputInfoManager == null){
+            userInputInfoManager = new UserInputInfoManager();
+        }
+        return userInputInfoManager;
+    }
 
-    private void setFixedAlimTalkMessageInfo(UserInputInfo fixedValue) {
+    public void setFixedAlimMsgInfo(FixedAlimMsgInfo fixedInfo) {
 
-        for (AlimMessageDataFormat info: alimTalkMessageInfoTable) {
-            info.setTMPL_CD(fixedValue.getTmpl_cd());
-            info.setSMS_SND_NUM(fixedValue.getSms_snd_num());
-            info.setREQ_DTM(fixedValue.getReq_dtm());
-            info.setPre_order_id(fixedValue.getPre_order_id());
-            info.setSND_MSG(replaceCouponNum(fixedValue, info.getCOUPON_NO()));
+        for (AlimMsgData alimMsgData: alimMsgInfoTable) {
+            alimMsgData.setTMPL_CD(fixedInfo.getTmpl_cd());
+            alimMsgData.setSMS_SND_NUM(fixedInfo.getSms_snd_num());
+            alimMsgData.setREQ_DTM(fixedInfo.getReq_dtm());
+            alimMsgData.setPre_order_id(fixedInfo.getPre_order_id());
+            alimMsgData.setSND_MSG(replaceCouponNum(fixedInfo, alimMsgData.getCOUPON_NO()));
         }
     }
 
-    public ArrayList<AlimMessageDataFormat> insertCouponInfo() throws IOException {
+    public void putCouponInfo() throws IOException {
 
-        ArrayList<AlimMessageDataFormat> alimTable = PreOrderListGenerator.getPreOrderListGenerator().getPreOrderList();
         XSSFWorkbook work = new XSSFWorkbook(new FileInputStream(new File ("/Users/mf839-005/Desktop/temp/temp.xlsx")));
         XSSFSheet sheet = work.getSheetAt(0);
 
-        for(int alimNum = 0; alimNum < alimTable.size(); alimNum ++){
-            XSSFRow row = sheet.getRow(alimNum);
+        for(int userNum = 0; userNum < alimMsgInfoTable.size(); userNum ++){
+            XSSFRow row = sheet.getRow(userNum);
             XSSFCell cell = row.getCell(0);
-            alimTable.get(alimNum).setCOUPON_NO(cell.getStringCellValue());
+            alimMsgInfoTable.get(userNum).setCOUPON_NO(cell.getStringCellValue());
         }
-
-
-        return alimTable;
     }
 
-
-    // 쿠폰번호 치환 메소드
-    private String replaceCouponNum (UserInputInfo usrInputInfo, String couponNum){
-        String sndMsg = usrInputInfo.getSnd_msg();
+    private String replaceCouponNum (FixedAlimMsgInfo fixedAlimMsgInfo, String couponNum){
+        String sndMsg = fixedAlimMsgInfo.getSnd_msg();
         sndMsg = sndMsg.replace("#{쿠폰번호}", couponNum);
         return  sndMsg;
-    }
-
-
-    public ArrayList<AlimMessageDataFormat> getAlimTalkMessageInfoTable(){
-        return alimTalkMessageInfoTable;
     }
 }
