@@ -11,15 +11,15 @@ import java.util.concurrent.TimeoutException;
 /**
  * Created by mf839-005 on 2016. 8. 10..
  */
-public class SQLQueryBuilder {
+public class SQLQueryMsgSender {
 
     private final static String ALIMTALKDB_QUEUE = "alimtalk";
     private final static String PREORDERDB_QUEUE = "preorder";
 
-    public SQLQueryBuilder() {
+    public SQLQueryMsgSender() {
     }
 
-    void createInsertQuery(AlimTalkDBConnectionManager connectionManager, ArrayList<AlimMsgData> alimTalkMessageInfoTable) throws IOException, TimeoutException {
+    void sendQueryMsg(AlimTalkDBConnectionManager connectionManager, ArrayList<AlimMsgData> alimTalkMessageInfoTable) throws IOException, TimeoutException {
 
         String columns= AlimMsgData.ALIMTALK_COLUMN;
         String values;
@@ -40,7 +40,7 @@ public class SQLQueryBuilder {
         connection.close();
     }
 
-    void createInsertQuery(PreOrderDBConnectionManager connectionManager, ArrayList<AlimMsgData> alimMsgInfoTable) throws IOException, TimeoutException {
+    void sendQueryMsg(PreOrderDBConnectionManager connectionManager, ArrayList<AlimMsgData> alimMsgInfoTable) throws IOException, TimeoutException {
 
         String columns= AlimMsgData.PRE_ORDER_COLUMN;
         String values;

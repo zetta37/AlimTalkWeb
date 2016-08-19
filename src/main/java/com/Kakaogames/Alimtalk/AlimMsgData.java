@@ -68,7 +68,7 @@ class AlimMsgData {
 
 
     /*
-     아래 부분은 알림톡/사전알림 서버 내 테이블들 별로 다른 Column 형식을 맞추기 위해 Query string을 생성해 주는 파트
+     아래 부분은 알림톡/사전알림 서버 내 테이블들 별로 다른 Column 형식을 맞추기 위해 Query string을 생성
      */
 
     String makeMZSENDTRANFormat() {

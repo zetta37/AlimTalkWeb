@@ -38,7 +38,7 @@ public class AlimTalkToolServlet extends HttpServlet {
         prt.write("temp.xlsx");
 
         // 사용자 입력 text 추출
-        FixedAlimMsgInfo fixedInfo = new FixedAlimMsgInfo(
+        FixedAlimMsgData fixedInfo = new FixedAlimMsgData(
                 request.getParameter("temp_cd"),
                 request.getParameter("sms_snd_num"),
                 request.getParameter("req_dtm"),
@@ -50,7 +50,7 @@ public class AlimTalkToolServlet extends HttpServlet {
         PreOrderedUserListManager.getPreOrderedUserListManager().setGenre_id(request.getParameter("genre_id"));
 
         try {
-            SQLQueryBuilder sqlQueryBuilder = new SQLQueryBuilder();
+            SQLQueryMsgSender SQLQueryMsgSender = new SQLQueryMsgSender();
             PhoneNumberLoader pnloader = new PhoneNumberLoader();
 
             PreOrderedUserListManager.getPreOrderedUserListManager().setPreOrderList(
@@ -61,10 +61,10 @@ public class AlimTalkToolServlet extends HttpServlet {
             userInputInfoManager.setFixedAlimMsgInfo(fixedInfo);
 
             // Query 생성 후 MQ로 발송
-            sqlQueryBuilder.createInsertQuery(
+            SQLQueryMsgSender.sendQueryMsg(
                     AlimTalkDBConnectionManager.getManager(),
                     PreOrderedUserListManager.getPreOrderedUserListManager().getPreOrderUserList());
-            sqlQueryBuilder.createInsertQuery(
+            SQLQueryMsgSender.sendQueryMsg(
                     PreOrderDBConnectionManager.getManager(),
                     PreOrderedUserListManager.getPreOrderedUserListManager().getPreOrderUserList());
 

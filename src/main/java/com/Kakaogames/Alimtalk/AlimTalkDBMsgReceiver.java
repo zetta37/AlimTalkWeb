@@ -10,15 +10,15 @@ import java.sql.SQLException;
 import java.util.concurrent.TimeoutException;
 
 /**
- * Created by mf839-005 on 2016. 8. 18..
+ * Created by mf839-005 on 2016. 8. 17..
  */
 
-public class PreOrderDBMsgQueueReceiver implements ServletContextListener{
+public class AlimTalkDBMsgReceiver implements ServletContextListener {
 
-    private static final String QUEUE_NAME = "preorder";
+    private static final String QUEUE_NAME = "alimtalk";
     private static java.sql.Connection dbConn;
     private static ConnectionFactory connectionFactory = new ConnectionFactory();
-    private static Connection rabbitMQConn;
+    private static Connection rabbitMQConn = null;
     private static Channel channel;
 
     public void contextInitialized(ServletContextEvent servletContextEvent) {
@@ -26,30 +26,32 @@ public class PreOrderDBMsgQueueReceiver implements ServletContextListener{
             connectionFactory.setHost("localhost");
             rabbitMQConn = connectionFactory.newConnection();
             channel = rabbitMQConn.createChannel();
+
             channel.queueDeclare(QUEUE_NAME, false, false, false, null);
 
             final int[] queryCounter = {0};
 
             Consumer consumer = new DefaultConsumer(channel){
                 @Override
-                public void handleDelivery(String consumerTag, Envelope envelope, AMQP.BasicProperties properties, byte[] body) throws UnsupportedEncodingException {
+                public void handleDelivery (String consumerTag, Envelope envelope, AMQP.BasicProperties properties, byte[] body) throws UnsupportedEncodingException {
                     try {
-                        dbConn = PreOrderDBConnectionManager.getConnection();
+                        dbConn =AlimTalkDBConnectionManager.getConnection();
 
-                        if (queryCounter[0] % 100 == 0 && queryCounter[0] != 0) {
-                            System.out.println("# [PreOrder] zzzz.....");
+                        if(queryCounter[0] % 100 == 0 && queryCounter[0]!=0) {
+                            System.out.println("# [Alimtalk] zzzz.....");
                             Thread.sleep(30000);
                         }
 
-//                        if (queryCounter[0] % 1 == 0 && queryCounter[0] != 0) {
-//                            System.out.println("# [PreOrder] zzzz.....");
+//                        if(queryCounter[0] % 1 == 0 && queryCounter[0]!=0) {
+//                            System.out.println("# [Alimtalk] zzzz.....");
 //                            Thread.sleep(30000);
 //                        }
 
                         String message = new String(body, "UTF-8");
-                        dbConn.setCatalog("test");
+                        dbConn.setCatalog("alimtalk");
                         java.sql.Statement statement = dbConn.createStatement();
                         statement.executeUpdate(message);
+
                         queryCounter[0]++;
 
                     } catch (SQLException e) {
@@ -71,7 +73,7 @@ public class PreOrderDBMsgQueueReceiver implements ServletContextListener{
 
     public void contextDestroyed(ServletContextEvent servletContextEvent) {
         try {
-            PreOrderDBConnectionManager.close();
+            AlimTalkDBConnectionManager.close();
             channel.close();
             rabbitMQConn.close();
         } catch (TimeoutException e) {
@@ -81,4 +83,3 @@ public class PreOrderDBMsgQueueReceiver implements ServletContextListener{
         }
     }
 }
-

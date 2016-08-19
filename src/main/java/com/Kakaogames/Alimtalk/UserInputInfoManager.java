@@ -14,11 +14,11 @@ import java.util.ArrayList;
 
 class UserInputInfoManager {
 
-    private static ArrayList<AlimMsgData> alimMsgInfoTable;
+    private static ArrayList<AlimMsgData> alimMsgDataTable;
     private static UserInputInfoManager userInputInfoManager;
 
     private UserInputInfoManager() throws IOException {
-        alimMsgInfoTable = PreOrderedUserListManager.getPreOrderedUserListManager().getPreOrderUserList();
+        alimMsgDataTable = PreOrderedUserListManager.getPreOrderedUserListManager().getPreOrderUserList();
     }
 
     public static UserInputInfoManager getUserInputInfoManager() throws IOException {
@@ -28,9 +28,9 @@ class UserInputInfoManager {
         return userInputInfoManager;
     }
 
-    public void setFixedAlimMsgInfo(FixedAlimMsgInfo fixedInfo) {
+    public void setFixedAlimMsgInfo(FixedAlimMsgData fixedInfo) {
 
-        for (AlimMsgData alimMsgData: alimMsgInfoTable) {
+        for (AlimMsgData alimMsgData: alimMsgDataTable) {
             alimMsgData.setTMPL_CD(fixedInfo.getTmpl_cd());
             alimMsgData.setSMS_SND_NUM(fixedInfo.getSms_snd_num());
             alimMsgData.setREQ_DTM(fixedInfo.getReq_dtm());
@@ -44,15 +44,15 @@ class UserInputInfoManager {
         XSSFWorkbook work = new XSSFWorkbook(new FileInputStream(new File ("/Users/mf839-005/Desktop/temp/temp.xlsx")));
         XSSFSheet sheet = work.getSheetAt(0);
 
-        for(int userNum = 0; userNum < alimMsgInfoTable.size(); userNum ++){
+        for(int userNum = 0; userNum < alimMsgDataTable.size(); userNum ++){
             XSSFRow row = sheet.getRow(userNum);
             XSSFCell cell = row.getCell(0);
-            alimMsgInfoTable.get(userNum).setCOUPON_NO(cell.getStringCellValue());
+            alimMsgDataTable.get(userNum).setCOUPON_NO(cell.getStringCellValue());
         }
     }
 
-    private String replaceCouponNum (FixedAlimMsgInfo fixedAlimMsgInfo, String couponNum){
-        String sndMsg = fixedAlimMsgInfo.getSnd_msg();
+    private String replaceCouponNum (FixedAlimMsgData fixedAlimMsgData, String couponNum){
+        String sndMsg = fixedAlimMsgData.getSnd_msg();
         sndMsg = sndMsg.replace("#{쿠폰번호}", couponNum);
         return  sndMsg;
     }

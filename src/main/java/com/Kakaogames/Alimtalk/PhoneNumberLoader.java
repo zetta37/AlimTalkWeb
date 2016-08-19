@@ -93,20 +93,19 @@ public class PhoneNumberLoader {
     public PhoneNumberLoader()  {
     }
 
-    public ArrayList<AlimMsgData> addPhoneNumberToList(ArrayList<AlimMsgData> preorderList) throws ParserConfigurationException {
+    public ArrayList<AlimMsgData> addPhoneNumberToList(ArrayList<AlimMsgData> alimMsgDataList) throws ParserConfigurationException {
 
         ArrayList<AlimMsgData> phoneNumMatchedList = new ArrayList<AlimMsgData>();
-        totalPreOrder = preorderList.size();
+        totalPreOrder = alimMsgDataList.size();
 
-        while(preorderList.size() > 0){
-            String userID = preorderList.get(0).getUserid();
+        while(alimMsgDataList.size() > 0){
+            String userID = alimMsgDataList.get(0).getUserid();
             String pNum = getPhoneNumber(userID);
             if(pNum==null||pNum.equals("")){
-                preorderList.remove(0);
+                alimMsgDataList.remove(0);
                 continue;
-//                pNum="01090257060";       //테스트용 코드
             }
-            AlimMsgData alimMsg = preorderList.remove(0);
+            AlimMsgData alimMsg = alimMsgDataList.remove(0);
             alimMsg.setPHONE_NUM(pNum);
             phoneNumMatchedList.add(alimMsg);
         }
@@ -141,7 +140,6 @@ public class PhoneNumberLoader {
             result = textNode.getNodeValue();
 
         } catch(SAXParseException e){
-            //System.out.println("USERID \""+userID+"\" 는 현재 존재하지 않는 사용자입니다. 리스트에서 제외됩니다.");
             withdrawUser++;
             return null;
         } catch (SAXException e) {
@@ -149,7 +147,6 @@ public class PhoneNumberLoader {
         } catch (IOException e) {
             e.printStackTrace();
         } catch(NullPointerException e){
-           // System.out.println("USERID \"" +userID+"\" 는 휴대폰 미인증 사용자입니다. 리스트에서 제외됩니다.");
             phoneNumUnidentified++;
             return null;
         }

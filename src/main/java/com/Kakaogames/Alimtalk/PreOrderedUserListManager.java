@@ -9,7 +9,7 @@ import java.util.ArrayList;
 public class PreOrderedUserListManager {
 
     private static PreOrderedUserListManager preOrderedUserListManager;
-    private ArrayList<AlimMsgData> alimList;
+    private static ArrayList<AlimMsgData> alimMsgDataTable;
     private String reg_dtm;
     private String game_id;
     private String genre_id;
@@ -25,14 +25,14 @@ public class PreOrderedUserListManager {
     }
 
     public ArrayList<AlimMsgData> getPreOrderUserList(){
-        if (alimList == null){
-            alimList = buildList();
+        if (alimMsgDataTable == null){
+            alimMsgDataTable = buildList();
         }
-        return alimList;
+        return alimMsgDataTable;
     }
 
     public void setPreOrderList(ArrayList<AlimMsgData> modifiedlist){
-        alimList = modifiedlist;
+        alimMsgDataTable = modifiedlist;
     }
 
 
