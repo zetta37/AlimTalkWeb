@@ -43,18 +43,26 @@ public class PreOrderedUserListManager {
         try {
             java.sql.Connection conn = PreOrderDBConnectionManager.getConnection();
             conn.setCatalog("GAME");
-            Statement statement = conn.createStatement();
-
-            String query = "select memberid, userid\n" +
+            PreparedStatement statement = conn.prepareStatement("select memberid, userid\n" +
                     "from (\n" +
-                    "(select memberid, userid, reg_dttm, genre_id from pre_order_reserve_game where game_id = "+game_id+")\n" +
+                    "(select memberid, userid, reg_dttm, genre_id from pre_order_reserve_game where game_id = ?)\n" +
                     "UNION\n" +
-                    "(select memberid, userid, reg_dttm, genre_id from pre_order_genre_reserve_game where genre_id = "+ genre_id +
-                    " and reg_dttm < \""+reg_dtm+"\")\n) temp\n" +
+                    "(select memberid, userid, reg_dttm, genre_id from pre_order_genre_reserve_game where genre_id = ? and reg_dttm < ?)\n) temp\n" +
                     "group by userid\n" +
-                    "order by memberid";
+                    "order by memberid");
+            statement.setString(1, game_id);
+            statement.setString(2, genre_id);
+            statement.setString(3, reg_dtm);
+//            String query = "select memberid, userid\n" +
+//                    "from (\n" +
+//                    "(select memberid, userid, reg_dttm, genre_id from pre_order_reserve_game where game_id = "+game_id+")\n" +
+//                    "UNION\n" +
+//                    "(select memberid, userid, reg_dttm, genre_id from pre_order_genre_reserve_game where genre_id = "+ genre_id +
+//                    " and reg_dttm < \""+reg_dtm+"\")\n) temp\n" +
+//                    "group by userid\n" +
+//                    "order by memberid";
 
-            ResultSet resultSet = statement.executeQuery(query);
+            ResultSet resultSet = statement.executeQuery();
 
             while(resultSet.next()){
                 AlimMsgData alimMsgData = new AlimMsgData();

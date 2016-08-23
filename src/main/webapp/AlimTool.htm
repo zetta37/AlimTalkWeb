@@ -1,0 +1,31 @@
+<html>
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+       <title>Kakao Games Alimtalk Uploader</title>
+    </head>
+    <body bgcolor="#ffff00" style="div">
+        <h3>Kakao Games Alimtalk Preperation Tool</h3>
+            <form action="UploadServlet" method="POST" enctype="multipart/form-data">
+                REG_DTM:   <input type="text" name="reg_dtm" class="upload-inp" /> ex) 2016-01-01 </br>
+                GAME_ID:   <input type="text" name="game_id" class="upload-inp" /></br>
+                GENRE_ID:   <input type="text" name="genre_id" class="upload-inp" /></br>
+                </br>
+                TMPL_CD:    <input type="text" name="temp_cd" class="upload-inp" /></br>
+                SMS_SND_NUM:    <input type="text" name="sms_snd_num" class="upload-inp" /></br>
+                REQ_DTM:        <input type="text" name="req_dtm" class="upload-inp" /></br>
+                PRE_ORDER_ID:   <input type="text" name="pre_order_id" class="upload-inp" /></br>
+                SND_MSG: </br>
+                <textarea name="snd_msg" rows="10" cols="50"></textarea>
+                </br>
+                Select the Coupon excel file to upload:
+                <input type="file" name="csvFile" accept="text/xls"></br></br>
+                <input type="submit" value="Upload"/>
+            </form>
+    </body>
+</html>
+<style>
+.upload-inp {
+    margin-left:10px;
+}
+
+</style>

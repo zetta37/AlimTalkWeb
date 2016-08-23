@@ -109,17 +109,6 @@ public class PhoneNumberLoader {
             alimMsg.setPHONE_NUM(pNum);
             phoneNumMatchedList.add(alimMsg);
         }
-        AlimTalkToolServlet.out.println(
-                "<table width=\"100%\" border=\"1\" align=\"center\">\n" +
-                "<tr bgcolor=\"#A9D0F5\">\n" +
-                "<th>Result</th><th></th>\n"+
-                "</tr>\n");
-
-        AlimTalkToolServlet.out.println("<tr><td>Pre-ordered Users</td>\n<td>"+totalPreOrder+"</td><br>"+
-                "<tr><td>Deactivated Accounts</td>\n<td>"+withdrawUser+"<br>"+
-                "<tr><td>Unidentified PhoneNums</td>\n<td>"+phoneNumUnidentified+"<br>"+
-                "<tr bgcolor=\"#F5A9A9\"><td>Overall Number of Removal(s)</td>\n<td>"+(withdrawUser+phoneNumUnidentified)+"<br>"+
-                "<tr bgcolor=\"#00ff00\"><td>Success</td>\n<td>"+(totalPreOrder-(withdrawUser+phoneNumUnidentified))+"<br>");
 
         return phoneNumMatchedList;
     }
@@ -153,5 +142,17 @@ public class PhoneNumberLoader {
 
         return "01090257060";           // 테스트용 코드
 //        return result;                // 실제 사용 코드
+    }
+
+    public int getPhoneNumUnidentified() {
+        return phoneNumUnidentified;
+    }
+
+    public int getTotalPreOrder() {
+        return totalPreOrder;
+    }
+
+    public int getWithdrawUser() {
+        return withdrawUser;
     }
 }

@@ -9,6 +9,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.Part;
 import javax.xml.parsers.ParserConfigurationException;
 import java.io.*;
+import java.util.ArrayList;
 import java.util.concurrent.TimeoutException;
 
 /**
@@ -16,8 +17,8 @@ import java.util.concurrent.TimeoutException;
  */
 
 @MultipartConfig(location="/Users/mf839-005/Desktop/temp")
-@WebServlet(name = "AlimTalkToolServlet")
-public class AlimTalkToolServlet extends HttpServlet {
+@WebServlet(name = "AlimTalkServlet")
+public class AlimTalkServlet extends HttpServlet {
 
     public static PrintWriter out;
 
@@ -26,12 +27,12 @@ public class AlimTalkToolServlet extends HttpServlet {
         response.setContentType("text/html");
         request.setCharacterEncoding("UTF-8");
         out = response.getWriter();
-        out.println("<html>\n" +
-                "<head>\n" +
-                "<meta http-equiv=\"Content-Type\" content=\"text/html; charset=euc-kr\">\n" +
-                "<title>Result</title>\n" +
-                "</head>\n" +
-                "<body bgcolor=\"#ffff00\">");
+//        out.println("<html>\n" +
+//                "<head>\n" +
+//                "<meta http-equiv=\"Content-Type\" content=\"text/html; charset=euc-kr\">\n" +
+//                "<title>Result</title>\n" +
+//                "</head>\n" +
+//                "<body bgcolor=\"#ffff00\">");
 
         // InputStream으로부터 Excel File 추출
         Part prt = request.getPart("csvFile");
@@ -45,16 +46,23 @@ public class AlimTalkToolServlet extends HttpServlet {
                 request.getParameter("pre_order_id"),
                 request.getParameter("snd_msg"));
 
-        PreOrderedUserListManager.getPreOrderedUserListManager().setReg_dtm(request.getParameter("reg_dtm"));
-        PreOrderedUserListManager.getPreOrderedUserListManager().setGame_id(request.getParameter("game_id"));
-        PreOrderedUserListManager.getPreOrderedUserListManager().setGenre_id(request.getParameter("genre_id"));
+        PreOrderedUserListManager preOrderListManager = PreOrderedUserListManager.getPreOrderedUserListManager();
+
+        preOrderListManager.setReg_dtm(request.getParameter("reg_dtm"));
+        preOrderListManager.setGame_id(request.getParameter("game_id"));
+        preOrderListManager.setGenre_id(request.getParameter("genre_id"));
 
         try {
             SQLQueryMsgSender SQLQueryMsgSender = new SQLQueryMsgSender();
             PhoneNumberLoader pnloader = new PhoneNumberLoader();
 
-            PreOrderedUserListManager.getPreOrderedUserListManager().setPreOrderList(
-                    pnloader.addPhoneNumberToList(PreOrderedUserListManager.getPreOrderedUserListManager().getPreOrderUserList()));
+            preOrderListManager.setPreOrderList(pnloader.addPhoneNumberToList(preOrderListManager.getPreOrderUserList()));
+            request.setAttribute("totalPreorder", pnloader.getTotalPreOrder());
+            request.setAttribute("unidentified", pnloader.getPhoneNumUnidentified());
+            request.setAttribute("withdraw", pnloader.getWithdrawUser());
+            request.setAttribute("removed", pnloader.getWithdrawUser()+pnloader.getPhoneNumUnidentified());
+            request.setAttribute("success", pnloader.getTotalPreOrder()-(pnloader.getWithdrawUser()+pnloader.getPhoneNumUnidentified()));
+            getServletContext().getRequestDispatcher("/WEB-INF/AlimResult.jsp").forward(request, response);
 
             UserInputInfoManager userInputInfoManager = UserInputInfoManager.getUserInputInfoManager();
             userInputInfoManager.putCouponInfo();
@@ -63,10 +71,10 @@ public class AlimTalkToolServlet extends HttpServlet {
             // Query 생성 후 MQ로 발송
             SQLQueryMsgSender.sendQueryMsg(
                     AlimTalkDBConnectionManager.getManager(),
-                    PreOrderedUserListManager.getPreOrderedUserListManager().getPreOrderUserList());
+                    preOrderListManager.getPreOrderUserList());
             SQLQueryMsgSender.sendQueryMsg(
                     PreOrderDBConnectionManager.getManager(),
-                    PreOrderedUserListManager.getPreOrderedUserListManager().getPreOrderUserList());
+                    preOrderListManager.getPreOrderUserList());
 
         } catch (ParserConfigurationException e) {
             e.printStackTrace();

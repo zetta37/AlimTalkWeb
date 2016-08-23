@@ -28,15 +28,15 @@ public class PreOrderDBMsgReceiver implements ServletContextListener{
             channel = rabbitMQConn.createChannel();
             channel.queueDeclare(QUEUE_NAME, false, false, false, null);
 
-            final int[] queryCounter = {0};
 
             Consumer consumer = new DefaultConsumer(channel){
+            private int queryCounter = 0;
                 @Override
                 public void handleDelivery(String consumerTag, Envelope envelope, AMQP.BasicProperties properties, byte[] body) throws UnsupportedEncodingException {
                     try {
                         dbConn = PreOrderDBConnectionManager.getConnection();
 
-                        if (queryCounter[0] % 100 == 0 && queryCounter[0] != 0) {
+                        if (queryCounter % 100 == 0 && queryCounter != 0) {
                             System.out.println("# [PreOrder] zzzz.....");
                             Thread.sleep(30000);
                         }
@@ -50,7 +50,7 @@ public class PreOrderDBMsgReceiver implements ServletContextListener{
                         dbConn.setCatalog("test");
                         java.sql.Statement statement = dbConn.createStatement();
                         statement.executeUpdate(message);
-                        queryCounter[0]++;
+                        queryCounter++;
 
                     } catch (SQLException e) {
                         e.printStackTrace();
