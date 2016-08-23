@@ -4,7 +4,6 @@ import com.rabbitmq.client.Channel;
 import com.rabbitmq.client.ConnectionFactory;
 
 import java.io.IOException;
-import java.sql.Connection;
 import java.util.ArrayList;
 import java.util.concurrent.TimeoutException;
 
@@ -19,7 +18,7 @@ public class SQLQueryMsgSender {
     public SQLQueryMsgSender() {
     }
 
-    void sendQueryMsg(AlimTalkDBConnectionManager connectionManager, ArrayList<AlimMsgData> alimTalkMessageInfoTable) throws IOException, TimeoutException {
+    void sendQueryMsg(AlimtalkDBConnectionManager connectionManager, ArrayList<AlimMsgData> alimTalkMessageInfoTable) throws IOException, TimeoutException {
 
         String columns= AlimMsgData.ALIMTALK_COLUMN;
         String values;
@@ -40,7 +39,7 @@ public class SQLQueryMsgSender {
         connection.close();
     }
 
-    void sendQueryMsg(PreOrderDBConnectionManager connectionManager, ArrayList<AlimMsgData> alimMsgInfoTable) throws IOException, TimeoutException {
+    void sendQueryMsg(PreorderDBConnectionManager connectionManager, ArrayList<AlimMsgData> alimMsgInfoTable) throws IOException, TimeoutException {
 
         String columns= AlimMsgData.PRE_ORDER_COLUMN;
         String values;

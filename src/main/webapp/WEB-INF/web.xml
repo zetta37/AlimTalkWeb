@@ -5,16 +5,16 @@
          version="3.1">
 
     <listener>
-        <listener-class>com.Kakaogames.Alimtalk.AlimTalkDBMsgReceiver</listener-class>
+        <listener-class>com.Kakaogames.Alimtalk.AlimtalkDBMsgReceiver</listener-class>
     </listener>
 
     <listener>
-        <listener-class>com.Kakaogames.Alimtalk.PreOrderDBMsgReceiver</listener-class>
+        <listener-class>com.Kakaogames.Alimtalk.PreorderDBMsgReceiver</listener-class>
     </listener>
 
     <servlet>
         <servlet-name>UploadServlet</servlet-name>
-        <servlet-class>com.Kakaogames.Alimtalk.AlimTalkServlet</servlet-class>
+        <servlet-class>com.Kakaogames.Alimtalk.AlimtalkServlet</servlet-class>
     </servlet>
 
     <servlet-mapping>

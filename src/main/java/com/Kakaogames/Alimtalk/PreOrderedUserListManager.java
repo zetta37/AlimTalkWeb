@@ -6,22 +6,22 @@ import java.util.ArrayList;
 /**
  * Created by mf839-005 on 2016. 8. 12..
  */
-public class PreOrderedUserListManager {
+public class PreorderedUserListManager {
 
-    private static PreOrderedUserListManager preOrderedUserListManager;
+    private static PreorderedUserListManager preorderedUserListManager;
     private static ArrayList<AlimMsgData> alimMsgDataTable;
     private String reg_dtm;
     private String game_id;
     private String genre_id;
 
-    private PreOrderedUserListManager(){
+    private PreorderedUserListManager(){
     }
 
-    public static PreOrderedUserListManager getPreOrderedUserListManager(){
-        if(preOrderedUserListManager == null){
-            preOrderedUserListManager = new PreOrderedUserListManager();
+    public static PreorderedUserListManager getPreorderedUserListManager(){
+        if(preorderedUserListManager == null){
+            preorderedUserListManager = new PreorderedUserListManager();
         }
-        return preOrderedUserListManager;
+        return preorderedUserListManager;
     }
 
     public ArrayList<AlimMsgData> getPreOrderUserList(){
@@ -41,7 +41,7 @@ public class PreOrderedUserListManager {
         ArrayList<AlimMsgData> resultList = new ArrayList<AlimMsgData>();
 
         try {
-            java.sql.Connection conn = PreOrderDBConnectionManager.getConnection();
+            java.sql.Connection conn = PreorderDBConnectionManager.getConnection();
             conn.setCatalog("GAME");
             PreparedStatement statement = conn.prepareStatement("select memberid, userid\n" +
                     "from (\n" +

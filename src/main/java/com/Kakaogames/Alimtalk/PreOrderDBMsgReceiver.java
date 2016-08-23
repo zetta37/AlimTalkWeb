@@ -13,7 +13,7 @@ import java.util.concurrent.TimeoutException;
  * Created by mf839-005 on 2016. 8. 18..
  */
 
-public class PreOrderDBMsgReceiver implements ServletContextListener{
+public class PreorderDBMsgReceiver implements ServletContextListener{
 
     private static final String QUEUE_NAME = "preorder";
     private static java.sql.Connection dbConn;
@@ -34,17 +34,12 @@ public class PreOrderDBMsgReceiver implements ServletContextListener{
                 @Override
                 public void handleDelivery(String consumerTag, Envelope envelope, AMQP.BasicProperties properties, byte[] body) throws UnsupportedEncodingException {
                     try {
-                        dbConn = PreOrderDBConnectionManager.getConnection();
+                        dbConn = PreorderDBConnectionManager.getConnection();
 
                         if (queryCounter % 100 == 0 && queryCounter != 0) {
                             System.out.println("# [PreOrder] zzzz.....");
                             Thread.sleep(30000);
                         }
-
-//                        if (queryCounter[0] % 1 == 0 && queryCounter[0] != 0) {
-//                            System.out.println("# [PreOrder] zzzz.....");
-//                            Thread.sleep(30000);
-//                        }
 
                         String message = new String(body, "UTF-8");
                         dbConn.setCatalog("test");
@@ -71,7 +66,7 @@ public class PreOrderDBMsgReceiver implements ServletContextListener{
 
     public void contextDestroyed(ServletContextEvent servletContextEvent) {
         try {
-            PreOrderDBConnectionManager.close();
+            PreorderDBConnectionManager.close();
             channel.close();
             rabbitMQConn.close();
         } catch (TimeoutException e) {

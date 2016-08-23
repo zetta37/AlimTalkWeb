@@ -9,7 +9,6 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.Part;
 import javax.xml.parsers.ParserConfigurationException;
 import java.io.*;
-import java.util.ArrayList;
 import java.util.concurrent.TimeoutException;
 
 /**
@@ -17,8 +16,8 @@ import java.util.concurrent.TimeoutException;
  */
 
 @MultipartConfig(location="/Users/mf839-005/Desktop/temp")
-@WebServlet(name = "AlimTalkServlet")
-public class AlimTalkServlet extends HttpServlet {
+@WebServlet(name = "AlimtalkServlet")
+public class AlimtalkServlet extends HttpServlet {
 
     public static PrintWriter out;
 
@@ -46,7 +45,7 @@ public class AlimTalkServlet extends HttpServlet {
                 request.getParameter("pre_order_id"),
                 request.getParameter("snd_msg"));
 
-        PreOrderedUserListManager preOrderListManager = PreOrderedUserListManager.getPreOrderedUserListManager();
+        PreorderedUserListManager preOrderListManager = PreorderedUserListManager.getPreorderedUserListManager();
 
         preOrderListManager.setReg_dtm(request.getParameter("reg_dtm"));
         preOrderListManager.setGame_id(request.getParameter("game_id"));
@@ -70,10 +69,10 @@ public class AlimTalkServlet extends HttpServlet {
 
             // Query 생성 후 MQ로 발송
             SQLQueryMsgSender.sendQueryMsg(
-                    AlimTalkDBConnectionManager.getManager(),
+                    AlimtalkDBConnectionManager.getManager(),
                     preOrderListManager.getPreOrderUserList());
             SQLQueryMsgSender.sendQueryMsg(
-                    PreOrderDBConnectionManager.getManager(),
+                    PreorderDBConnectionManager.getManager(),
                     preOrderListManager.getPreOrderUserList());
 
         } catch (ParserConfigurationException e) {

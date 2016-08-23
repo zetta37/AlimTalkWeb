@@ -18,7 +18,7 @@ class UserInputInfoManager {
     private static UserInputInfoManager userInputInfoManager;
 
     private UserInputInfoManager() throws IOException {
-        alimMsgDataTable = PreOrderedUserListManager.getPreOrderedUserListManager().getPreOrderUserList();
+        alimMsgDataTable = PreorderedUserListManager.getPreorderedUserListManager().getPreOrderUserList();
     }
 
     public static UserInputInfoManager getUserInputInfoManager() throws IOException {

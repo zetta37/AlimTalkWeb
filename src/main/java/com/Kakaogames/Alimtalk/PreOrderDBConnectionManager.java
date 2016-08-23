@@ -10,9 +10,9 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 
-class PreOrderDBConnectionManager {
+class PreorderDBConnectionManager {
 
-    private static PreOrderDBConnectionManager connectionManager;
+    private static PreorderDBConnectionManager connectionManager;
     private static Connection conn;
     private static String url = "jdbc:mysql://10.30.143.54:3306/";
 
@@ -20,22 +20,22 @@ class PreOrderDBConnectionManager {
     private static String id = "gametest";
     private static String pwd = "gametestpw";
 
-    private PreOrderDBConnectionManager() throws SQLException {
+    private PreorderDBConnectionManager() throws SQLException {
         try {
             Class.forName("com.mysql.jdbc.Driver");
             conn = DriverManager.getConnection(url, id, pwd);
         } catch (ClassNotFoundException classExpt) {
-            System.out.println("** FAILURE @ AlimTalkDBConnectionManager(): CLASSNOTFOUND EXCEPTION");
+            System.out.println("** FAILURE @ AlimtalkDBConnectionManager(): CLASSNOTFOUND EXCEPTION");
         }
     }
 
-    public static PreOrderDBConnectionManager getManager(){
+    public static PreorderDBConnectionManager getManager(){
         return connectionManager;
     }
 
     public static Connection getConnection() throws SQLException {
         if (connectionManager == null) {
-            connectionManager = new PreOrderDBConnectionManager();
+            connectionManager = new PreorderDBConnectionManager();
         }
         return conn;
     }
@@ -44,7 +44,7 @@ class PreOrderDBConnectionManager {
         try {
             connectionManager.getConnection().close();
         } catch (SQLException sqlExpt) {
-            System.out.println("** FAILURE @ AlimTalkDBConnectionManager.close(): SQLException --  " + sqlExpt.getMessage());
+            System.out.println("** FAILURE @ AlimtalkDBConnectionManager.close(): SQLException --  " + sqlExpt.getMessage());
             System.out.println("            SQLState: " + sqlExpt.getSQLState());
         }
     }

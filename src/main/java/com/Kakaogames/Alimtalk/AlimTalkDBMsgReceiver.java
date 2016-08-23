@@ -13,7 +13,7 @@ import java.util.concurrent.TimeoutException;
  * Created by mf839-005 on 2016. 8. 17..
  */
 
-public class AlimTalkDBMsgReceiver implements ServletContextListener {
+public class AlimtalkDBMsgReceiver implements ServletContextListener {
 
     private static final String QUEUE_NAME = "alimtalk";
     private static java.sql.Connection dbConn;
@@ -29,25 +29,18 @@ public class AlimTalkDBMsgReceiver implements ServletContextListener {
 
             channel.queueDeclare(QUEUE_NAME, false, false, false, null);
 
-//            final int[] queryCounter = {0};
-
             Consumer consumer = new DefaultConsumer(channel){
 
                 private int queryCounter;
                 @Override
                 public void handleDelivery (String consumerTag, Envelope envelope, AMQP.BasicProperties properties, byte[] body) throws UnsupportedEncodingException {
                     try {
-                        dbConn =AlimTalkDBConnectionManager.getConnection();
+                        dbConn = AlimtalkDBConnectionManager.getConnection();
 
                         if(queryCounter % 100 == 0 && queryCounter!=0) {
                             System.out.println("# [Alimtalk] zzzz.....");
                             Thread.sleep(30000);
                         }
-
-//                        if(queryCounter[0] % 1 == 0 && queryCounter[0]!=0) {
-//                            System.out.println("# [Alimtalk] zzzz.....");
-//                            Thread.sleep(30000);
-//                        }
 
                         String message = new String(body, "UTF-8");
                         dbConn.setCatalog("alimtalk");
@@ -75,7 +68,7 @@ public class AlimTalkDBMsgReceiver implements ServletContextListener {
 
     public void contextDestroyed(ServletContextEvent servletContextEvent) {
         try {
-            AlimTalkDBConnectionManager.close();
+            AlimtalkDBConnectionManager.close();
             channel.close();
             rabbitMQConn.close();
         } catch (TimeoutException e) {
