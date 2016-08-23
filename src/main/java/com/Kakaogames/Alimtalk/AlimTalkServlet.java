@@ -23,7 +23,6 @@ public class AlimtalkServlet extends HttpServlet {
 
         response.setContentType("text/html");
         request.setCharacterEncoding("UTF-8");
-        PrintWriter out = response.getWriter();
 
         // InputStream으로부터 Excel File 추출
         Part prt = request.getPart("csvFile");

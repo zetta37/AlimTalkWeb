@@ -40,26 +40,23 @@ public class PreorderDBMsgConsumer implements ServletContextListener{
                     try {
                         dbConn = PreorderDBConnectionManager.getConnection();
 
-                        if (queryCounter % 1 == 0 && queryCounter != 0) {
+                        if (queryCounter % 100 == 0 && queryCounter != 0) {
                             System.out.println("# [PreOrder] Paused");
-                            Thread.sleep(10000);
+                            Thread.sleep(30000);
                         }
-
 
                         String message = new String(body, "UTF-8");
                         if(msgCount == 0){
                             msgCount = parseInt(message);
-                            System.out.println("# of Msgs => "+ msgCount);
                         } else {
                             dbConn.setCatalog("GAME");
                             java.sql.Statement statement = dbConn.createStatement();
                             statement.executeUpdate(message);
                             queryCounter++;
+                            if(queryCounter == msgCount){
+                                statement.executeUpdate("update pre_order_game set mail = \"Y\" where pre_order_game.ID = 37");
+                            }
                         }
-//                        dbConn.setCatalog("test");
-//                        java.sql.Statement statement = dbConn.createStatement();
-//                        statement.executeUpdate(message);
-//                        queryCounter++;
 
                     } catch (SQLException e) {
                         e.printStackTrace();
@@ -79,7 +76,7 @@ public class PreorderDBMsgConsumer implements ServletContextListener{
 
     public void contextDestroyed(ServletContextEvent servletContextEvent) {
         try {
-            System.out.println("  ## CONN CLOSING ##");
+            System.out.println("  ### CONN CLOSING ###");
             PreorderDBConnectionManager.close();
             channel.close();
             rabbitMQConn.close();
