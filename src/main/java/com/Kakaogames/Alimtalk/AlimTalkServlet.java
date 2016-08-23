@@ -19,19 +19,11 @@ import java.util.concurrent.TimeoutException;
 @WebServlet(name = "AlimtalkServlet")
 public class AlimtalkServlet extends HttpServlet {
 
-    public static PrintWriter out;
-
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
         response.setContentType("text/html");
         request.setCharacterEncoding("UTF-8");
-        out = response.getWriter();
-//        out.println("<html>\n" +
-//                "<head>\n" +
-//                "<meta http-equiv=\"Content-Type\" content=\"text/html; charset=euc-kr\">\n" +
-//                "<title>Result</title>\n" +
-//                "</head>\n" +
-//                "<body bgcolor=\"#ffff00\">");
+        PrintWriter out = response.getWriter();
 
         // InputStream으로부터 Excel File 추출
         Part prt = request.getPart("csvFile");
@@ -52,10 +44,13 @@ public class AlimtalkServlet extends HttpServlet {
         preOrderListManager.setGenre_id(request.getParameter("genre_id"));
 
         try {
-            SQLQueryMsgSender SQLQueryMsgSender = new SQLQueryMsgSender();
+            SQLQueryMsgProducer SQLQueryMsgProducer = new SQLQueryMsgProducer();
             PhoneNumberLoader pnloader = new PhoneNumberLoader();
 
+            // 회원정보DB API연동 및 데이터 처리
             preOrderListManager.setPreOrderList(pnloader.addPhoneNumberToList(preOrderListManager.getPreOrderUserList()));
+
+            // View 처리
             request.setAttribute("totalPreorder", pnloader.getTotalPreOrder());
             request.setAttribute("unidentified", pnloader.getPhoneNumUnidentified());
             request.setAttribute("withdraw", pnloader.getWithdrawUser());
@@ -68,10 +63,10 @@ public class AlimtalkServlet extends HttpServlet {
             userInputInfoManager.setFixedAlimMsgInfo(fixedInfo);
 
             // Query 생성 후 MQ로 발송
-            SQLQueryMsgSender.sendQueryMsg(
+            SQLQueryMsgProducer.sendQueryMsg(
                     AlimtalkDBConnectionManager.getManager(),
                     preOrderListManager.getPreOrderUserList());
-            SQLQueryMsgSender.sendQueryMsg(
+            SQLQueryMsgProducer.sendQueryMsg(
                     PreorderDBConnectionManager.getManager(),
                     preOrderListManager.getPreOrderUserList());
 
