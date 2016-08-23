@@ -9,20 +9,24 @@ import java.io.UnsupportedEncodingException;
 import java.sql.SQLException;
 import java.util.concurrent.TimeoutException;
 
+import static java.lang.Integer.parseInt;
+
 /**
  * Created by mf839-005 on 2016. 8. 17..
  */
 
-public class AlimtalkDBMsgReceiver implements ServletContextListener {
+public class AlimtalkDBMsgConsumer implements ServletContextListener {
 
     private static final String QUEUE_NAME = "alimtalk";
     private static java.sql.Connection dbConn;
     private static ConnectionFactory connectionFactory = new ConnectionFactory();
     private static Connection rabbitMQConn = null;
     private static Channel channel;
+    private static int msgCount = 0;
 
     public void contextInitialized(ServletContextEvent servletContextEvent) {
         try {
+            System.out.println(" # Alimtalk Consumer Initialized");
             connectionFactory.setHost("localhost");
             rabbitMQConn = connectionFactory.newConnection();
             channel = rabbitMQConn.createChannel();
@@ -37,17 +41,27 @@ public class AlimtalkDBMsgReceiver implements ServletContextListener {
                     try {
                         dbConn = AlimtalkDBConnectionManager.getConnection();
 
-                        if(queryCounter % 100 == 0 && queryCounter!=0) {
-                            System.out.println("# [Alimtalk] zzzz.....");
-                            Thread.sleep(30000);
+                        if(queryCounter % 1 == 0 && queryCounter!=0) {
+                            System.out.println("# [Alimtalk] Paused");
+                            Thread.sleep(10000);
                         }
 
                         String message = new String(body, "UTF-8");
-                        dbConn.setCatalog("alimtalk");
-                        java.sql.Statement statement = dbConn.createStatement();
-                        statement.executeUpdate(message);
 
-                        queryCounter++;
+                        if(msgCount == 0){
+                            msgCount = parseInt(message);
+                            System.out.println("# of Msgs => "+ msgCount);
+                        } else {
+                            dbConn.setCatalog("alimtalk");
+                            java.sql.Statement statement = dbConn.createStatement();
+                            statement.executeUpdate(message);
+                            queryCounter++;
+                        }
+//                            String message = new String(body, "UTF-8");
+//                            dbConn.setCatalog("alimtalk");
+//                            java.sql.Statement statement = dbConn.createStatement();
+//                            statement.executeUpdate(message);
+//                        queryCounter++;
 
                     } catch (SQLException e) {
                         e.printStackTrace();

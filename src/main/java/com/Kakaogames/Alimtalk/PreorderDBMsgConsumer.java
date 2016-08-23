@@ -9,20 +9,24 @@ import java.io.UnsupportedEncodingException;
 import java.sql.SQLException;
 import java.util.concurrent.TimeoutException;
 
+import static java.lang.Integer.parseInt;
+
 /**
  * Created by mf839-005 on 2016. 8. 18..
  */
 
-public class PreorderDBMsgReceiver implements ServletContextListener{
+public class PreorderDBMsgConsumer implements ServletContextListener{
 
     private static final String QUEUE_NAME = "preorder";
     private static java.sql.Connection dbConn;
     private static ConnectionFactory connectionFactory = new ConnectionFactory();
     private static Connection rabbitMQConn;
     private static Channel channel;
+    private static int msgCount = 0;
 
     public void contextInitialized(ServletContextEvent servletContextEvent) {
         try {
+            System.out.println(" # Preorder Consumer Initialized");
             connectionFactory.setHost("localhost");
             rabbitMQConn = connectionFactory.newConnection();
             channel = rabbitMQConn.createChannel();
@@ -32,20 +36,30 @@ public class PreorderDBMsgReceiver implements ServletContextListener{
             Consumer consumer = new DefaultConsumer(channel){
             private int queryCounter = 0;
                 @Override
-                public void handleDelivery(String consumerTag, Envelope envelope, AMQP.BasicProperties properties, byte[] body) throws UnsupportedEncodingException {
+                public void handleDelivery(String consumerTag, Envelope envelope, AMQP.BasicProperties properties, byte[] body) throws IOException {
                     try {
                         dbConn = PreorderDBConnectionManager.getConnection();
 
-                        if (queryCounter % 100 == 0 && queryCounter != 0) {
-                            System.out.println("# [PreOrder] zzzz.....");
-                            Thread.sleep(30000);
+                        if (queryCounter % 1 == 0 && queryCounter != 0) {
+                            System.out.println("# [PreOrder] Paused");
+                            Thread.sleep(10000);
                         }
 
+
                         String message = new String(body, "UTF-8");
-                        dbConn.setCatalog("test");
-                        java.sql.Statement statement = dbConn.createStatement();
-                        statement.executeUpdate(message);
-                        queryCounter++;
+                        if(msgCount == 0){
+                            msgCount = parseInt(message);
+                            System.out.println("# of Msgs => "+ msgCount);
+                        } else {
+                            dbConn.setCatalog("GAME");
+                            java.sql.Statement statement = dbConn.createStatement();
+                            statement.executeUpdate(message);
+                            queryCounter++;
+                        }
+//                        dbConn.setCatalog("test");
+//                        java.sql.Statement statement = dbConn.createStatement();
+//                        statement.executeUpdate(message);
+//                        queryCounter++;
 
                     } catch (SQLException e) {
                         e.printStackTrace();
@@ -54,7 +68,6 @@ public class PreorderDBMsgReceiver implements ServletContextListener{
                     }
                 }
             };
-
             channel.basicConsume(QUEUE_NAME, true, consumer);
 
         } catch (IOException e) {
@@ -66,6 +79,7 @@ public class PreorderDBMsgReceiver implements ServletContextListener{
 
     public void contextDestroyed(ServletContextEvent servletContextEvent) {
         try {
+            System.out.println("  ## CONN CLOSING ##");
             PreorderDBConnectionManager.close();
             channel.close();
             rabbitMQConn.close();
