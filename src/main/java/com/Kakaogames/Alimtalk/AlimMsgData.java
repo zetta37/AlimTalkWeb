@@ -7,7 +7,7 @@ package com.Kakaogames.Alimtalk;
 class AlimMsgData {
 
     static final String ALIMTALK_COLUMN= "SENDER_KEY, CHANNEL, PHONE_NUM, TMPL_CD, SMS_SND_NUM, REQ_DTM, SMS_SND_YN, TRAN_STS, MEMBER_ID, COUPON_NO, SND_MSG";
-    static final String PRE_ORDER_COLUMN  = "pre_order_id, userid, coupon, memberid";
+    static final String PRE_ORDER_COLUMN  = "game_id, userid, coupon, memberid";
     // 고정 값
     private final String SENDER_KEY = "8f67c73164660c66fa89eb70ccc2826b0de8f802";
     private final String CHANNEL = "A";
@@ -22,7 +22,7 @@ class AlimMsgData {
     private String COUPON_NO;
     private String SND_MSG;
     private String userid;
-    private String pre_order_id;
+    private String game_id;
 
     AlimMsgData() {
     }
@@ -62,8 +62,8 @@ class AlimMsgData {
     void setUserid(String userid) {
         this.userid = userid;
     }
-    void setPre_order_id(String pre_order_id) {
-        this.pre_order_id = pre_order_id;
+    void setGame_id(String game_id) {
+        this.game_id = game_id;
     }
 
 
@@ -78,6 +78,6 @@ class AlimMsgData {
     }
 
     String makePreOrderCouponFormat() {
-        return ("'" + pre_order_id + "', '" + userid + "', '" + COUPON_NO + "', '" + MEMBER_ID+"'");
+        return ("'" + game_id + "', '" + userid + "', '" + COUPON_NO + "', '" + MEMBER_ID+"'");
     }
 }

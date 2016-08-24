@@ -18,7 +18,7 @@ class UserInputInfoManager {
     private static UserInputInfoManager userInputInfoManager;
 
     private UserInputInfoManager() throws IOException {
-        alimMsgDataTable = PreorderedUserListManager.getPreorderedUserListManager().getPreOrderUserList();
+        alimMsgDataTable = PreorderedUserListManager.getPreorderedUserListManager().getPreorderUserList();
     }
 
     public static UserInputInfoManager getUserInputInfoManager() throws IOException {
@@ -34,7 +34,7 @@ class UserInputInfoManager {
             alimMsgData.setTMPL_CD(fixedInfo.getTmpl_cd());
             alimMsgData.setSMS_SND_NUM(fixedInfo.getSms_snd_num());
             alimMsgData.setREQ_DTM(fixedInfo.getReq_dtm());
-            alimMsgData.setPre_order_id(fixedInfo.getPre_order_id());
+            alimMsgData.setGame_id(fixedInfo.getGame_id());
             alimMsgData.setSND_MSG(replaceCouponNum(fixedInfo, alimMsgData.getCOUPON_NO()));
         }
     }
