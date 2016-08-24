@@ -41,23 +41,19 @@ public class AlimtalkDBMsgConsumer implements ServletContextListener {
                     try {
                         dbConn = AlimtalkDBConnectionManager.getConnection();
 
-                        if(queryCounter % 100 == 0 && queryCounter!=0) {
+                        if(queryCounter % 500 == 0 && queryCounter!=0) {
                             System.out.println("# [Alimtalk] Paused");
                             Thread.sleep(30000);
                         }
-
                         String message = new String(body, "UTF-8");
-
                         if(msgCount == 0){
                             msgCount = parseInt(message);
                         } else {
                             dbConn.setCatalog("alimtalk");
-                            java.sql.Statement statement = dbConn.createStatement();
-                            statement.executeUpdate(message);
+//                            java.sql.Statement statement = dbConn.createStatement();
+//                            statement.executeUpdate(message);
                             queryCounter++;
-
                         }
-
                     } catch (SQLException e) {
                         e.printStackTrace();
                     } catch (InterruptedException e) {

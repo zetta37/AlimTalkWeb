@@ -54,13 +54,13 @@ public class PhoneNumberLoader {
 
             DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
             DocumentBuilder builder = factory.newDocumentBuilder();
-            String xml = String.format("http://dev.rest.member.game.daum.net/services/13111/users/%s", userID);
+            String xml = String.format("http://rest.member.game.daum.net/services/13111/users/%s", userID);
 
             org.w3c.dom.Document document = builder.parse(xml);
             NodeList nodelist = document.getElementsByTagName("cphone");
             Node textNode = nodelist.item(0).getChildNodes().item(0);
             result = textNode.getNodeValue();
-
+//            System.out.println(userID+": " + result);
         } catch(SAXParseException e){
             withdrawUser++;
             return null;
@@ -73,8 +73,8 @@ public class PhoneNumberLoader {
             return null;
         }
 
-//        return "01090257060";           // 테스트용 코드: 내 번호로 모두 치환
-        return result;                // 실제 사용 코드
+        return "01090257060";           // 테스트용 코드: 내 번호로 모두 치환
+//        return result;                // 실제 사용 코드
     }
 
     public int getPhoneNumUnidentified() {

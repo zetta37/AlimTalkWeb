@@ -5,7 +5,6 @@ import com.rabbitmq.client.*;
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
 import java.io.IOException;
-import java.io.UnsupportedEncodingException;
 import java.sql.SQLException;
 import java.util.concurrent.TimeoutException;
 
@@ -40,7 +39,7 @@ public class PreorderDBMsgConsumer implements ServletContextListener{
                     try {
                         dbConn = PreorderDBConnectionManager.getConnection();
 
-                        if (queryCounter % 100 == 0 && queryCounter != 0) {
+                        if (queryCounter % 500 == 0 && queryCounter != 0) {
                             System.out.println("# [PreOrder] Paused");
                             Thread.sleep(30000);
                         }
@@ -50,11 +49,11 @@ public class PreorderDBMsgConsumer implements ServletContextListener{
                             msgCount = parseInt(message);
                         } else {
                             dbConn.setCatalog("GAME");
-                            java.sql.Statement statement = dbConn.createStatement();
-                            statement.executeUpdate(message);
+//                            java.sql.Statement statement = dbConn.createStatement();
+//                            statement.executeUpdate(message);
                             queryCounter++;
                             if(queryCounter == msgCount){
-                                statement.executeUpdate("update pre_order_game set mail = \"Y\" where pre_order_game.ID = 37");
+//                                statement.executeUpdate("update pre_order_game set mail = \"Y\" where pre_order_game.ID = 24");
                             }
                         }
 
@@ -65,6 +64,7 @@ public class PreorderDBMsgConsumer implements ServletContextListener{
                     }
                 }
             };
+
             channel.basicConsume(QUEUE_NAME, true, consumer);
 
         } catch (IOException e) {

@@ -12,7 +12,7 @@ import java.util.concurrent.TimeoutException;
  */
 public class SQLQueryMsgProducer {
 
-    private static boolean flag = false;
+//    private static boolean flag = false;
     private final static String ALIMTALKDB_QUEUE = "alimtalk";
     private final static String PREORDERDB_QUEUE = "preorder";
 
@@ -21,6 +21,7 @@ public class SQLQueryMsgProducer {
 
     void sendQueryMsg(AlimtalkDBConnectionManager connectionManager, ArrayList<AlimMsgData> alimTalkMsgInfoTable) throws IOException, TimeoutException {
 
+        System.out.println("Sending Start - Alimtalk");
         String columns= AlimMsgData.ALIMTALK_COLUMN;
         String values;
         String message;
@@ -43,10 +44,12 @@ public class SQLQueryMsgProducer {
 
         channel.close();
         connection.close();
+        System.out.println("Sending END - Alimtalk");
     }
 
     void sendQueryMsg(PreorderDBConnectionManager connectionManager, ArrayList<AlimMsgData> alimMsgInfoTable) throws IOException, TimeoutException {
 
+        System.out.println("Sending Start - Preorder");
         String columns= AlimMsgData.PRE_ORDER_COLUMN;
         String values;
         String message;
@@ -70,13 +73,14 @@ public class SQLQueryMsgProducer {
 
         channel.close();
         connection.close();
+        System.out.println("Sending END - Preorder");
     }
 
-    boolean isDone(){
-        if (flag){
-            return flag;
-        } else{
-            return flag;
-        }
-    }
+//    boolean isDone(){
+//        if (flag){
+//            return flag;
+//        } else{
+//            return flag;
+//        }
+//    }
 }
