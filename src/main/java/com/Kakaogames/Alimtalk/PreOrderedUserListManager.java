@@ -8,8 +8,9 @@ import java.util.ArrayList;
  */
 public class PreorderedUserListManager {
 
+//    private final Object lock = new Object();
     private static PreorderedUserListManager preorderedUserListManager;
-    private static ArrayList<AlimMsgData> alimMsgDataTable;
+    private static ArrayList<AlimMsgData> preorderUserList;
     private String reg_dtm;
     private String game_id;
     private String genre_id;
@@ -24,19 +25,22 @@ public class PreorderedUserListManager {
         return preorderedUserListManager;
     }
 
-    public ArrayList<AlimMsgData> getPreOrderUserList(){
-        if (alimMsgDataTable == null){
-            alimMsgDataTable = buildList();
-        }
-        return alimMsgDataTable;
+    public synchronized ArrayList<AlimMsgData> getPreorderUserList(){
+            System.out.println("lock getPreOrder");
+            if (preorderUserList == null) {
+                preorderUserList = buildList();
+            }
+            System.out.println("unlock getPreOrder");
+            return preorderUserList;
     }
 
-    public void setPreOrderList(ArrayList<AlimMsgData> modifiedlist){
-        alimMsgDataTable = modifiedlist;
+    public synchronized void setPreorderUserList(ArrayList<AlimMsgData> modifiedlist){
+            System.out.println("lock setPreOrder");
+            preorderUserList = modifiedlist;
+            System.out.println("unlock setPreOrder");
     }
 
-
-    private ArrayList<AlimMsgData> buildList(){
+    private synchronized ArrayList<AlimMsgData> buildList(){
 
         ArrayList<AlimMsgData> resultList = new ArrayList<AlimMsgData>();
 
@@ -53,14 +57,6 @@ public class PreorderedUserListManager {
             statement.setString(1, game_id);
             statement.setString(2, genre_id);
             statement.setString(3, reg_dtm);
-//            String query = "select memberid, userid\n" +
-//                    "from (\n" +
-//                    "(select memberid, userid, reg_dttm, genre_id from pre_order_reserve_game where game_id = "+game_id+")\n" +
-//                    "UNION\n" +
-//                    "(select memberid, userid, reg_dttm, genre_id from pre_order_genre_reserve_game where genre_id = "+ genre_id +
-//                    " and reg_dttm < \""+reg_dtm+"\")\n) temp\n" +
-//                    "group by userid\n" +
-//                    "order by memberid";
 
             ResultSet resultSet = statement.executeQuery();
 
@@ -78,14 +74,16 @@ public class PreorderedUserListManager {
     }
 
     public void setReg_dtm(String reg_dtm) {
-        this.reg_dtm = reg_dtm;
+            this.reg_dtm = reg_dtm;
+//        }
     }
 
     public void setGame_id(String game_id) {
-        this.game_id = game_id;
+            this.game_id = game_id;
     }
 
     public void setGenre_id(String genre_id) {
-        this.genre_id = genre_id;
+            this.genre_id = genre_id;
     }
+
 }

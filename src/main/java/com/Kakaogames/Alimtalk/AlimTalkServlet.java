@@ -25,7 +25,7 @@ public class AlimtalkServlet extends HttpServlet {
         request.setCharacterEncoding("UTF-8");
 
         // InputStream으로부터 Excel File 추출
-        Part prt = request.getPart("csvFile");
+        Part prt = request.getPart("couponFile");
         prt.write("temp.xlsx");
 
         // 사용자 입력 text 추출

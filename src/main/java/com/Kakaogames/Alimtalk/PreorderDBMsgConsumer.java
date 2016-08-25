@@ -49,11 +49,11 @@ public class PreorderDBMsgConsumer implements ServletContextListener{
                             msgCount = parseInt(message);
                         } else {
                             dbConn.setCatalog("GAME");
-//                            java.sql.Statement statement = dbConn.createStatement();
-//                            statement.executeUpdate(message);
+                            java.sql.Statement statement = dbConn.createStatement();
+                            statement.executeUpdate(message);
                             queryCounter++;
                             if(queryCounter == msgCount){
-//                                statement.executeUpdate("update pre_order_game set mail = \"Y\" where pre_order_game.ID = 24");
+                                statement.executeUpdate("update pre_order_game set mail = \"Y\" where pre_order_game.ID = 24");
                             }
                         }
 

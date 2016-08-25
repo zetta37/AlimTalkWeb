@@ -7,7 +7,7 @@ package com.Kakaogames.Alimtalk;
 class AlimMsgData {
 
     static final String ALIMTALK_COLUMN= "SENDER_KEY, CHANNEL, PHONE_NUM, TMPL_CD, SMS_SND_NUM, REQ_DTM, SMS_SND_YN, TRAN_STS, MEMBER_ID, COUPON_NO, SND_MSG";
-    static final String PRE_ORDER_COLUMN  = "game_id, userid, coupon, memberid";
+    static final String PRE_ORDER_COLUMN  = "pre_order_id, userid, coupon, memberid";
     // 고정 값
     private final String SENDER_KEY = "8f67c73164660c66fa89eb70ccc2826b0de8f802";
     private final String CHANNEL = "A";

@@ -50,8 +50,8 @@ public class AlimtalkDBMsgConsumer implements ServletContextListener {
                             msgCount = parseInt(message);
                         } else {
                             dbConn.setCatalog("alimtalk");
-//                            java.sql.Statement statement = dbConn.createStatement();
-//                            statement.executeUpdate(message);
+                            java.sql.Statement statement = dbConn.createStatement();
+                            statement.executeUpdate(message);
                             queryCounter++;
                         }
                     } catch (SQLException e) {

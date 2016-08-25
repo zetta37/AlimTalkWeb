@@ -29,7 +29,7 @@ public class SQLQueryMsgProducer {
         connectionFactory.setHost("localhost");
         com.rabbitmq.client.Connection connection = connectionFactory.newConnection();
         Channel channel = connection.createChannel();
-        channel.queueDeclare(ALIMTALKDB_QUEUE, false, false, false, null);
+        channel.queueDeclare(ALIMTALKDB_QUEUE, true, false, true, null);
 
         // 알림갯수 전송
         String msgCount = alimTalkMsgInfoTable.size()+"";
