@@ -16,7 +16,7 @@ import java.util.concurrent.TimeoutException;
  */
 
 @MultipartConfig(location="/Users/mf839-005/Desktop/temp")
-@WebServlet(name = "AlimtalkServlet")
+@WebServlet(name = "UploadServlet")
 public class AlimtalkServlet extends HttpServlet {
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -30,24 +30,27 @@ public class AlimtalkServlet extends HttpServlet {
 
         // 사용자 입력 text 추출
         FixedAlimMsgData fixedInfo = new FixedAlimMsgData(
+                request.getParameter("reg_dtm"),
+                request.getParameter("game_id"),
+                request.getParameter("genre_id"),
                 request.getParameter("temp_cd"),
                 request.getParameter("sms_snd_num"),
                 request.getParameter("req_dtm"),
-                request.getParameter("pre_order_id"),
                 request.getParameter("snd_msg"));
 
         PreorderedUserListManager preOrderListManager = PreorderedUserListManager.getPreorderedUserListManager();
 
-        preOrderListManager.setReg_dtm(request.getParameter("reg_dtm"));
-        preOrderListManager.setGame_id(request.getParameter("game_id"));
-        preOrderListManager.setGenre_id(request.getParameter("genre_id"));
+        preOrderListManager.setReg_dtm(fixedInfo.getReg_dtm());
+        preOrderListManager.setGame_id(fixedInfo.getGame_id());
+        preOrderListManager.setGenre_id(fixedInfo.getGenre_id());
+
 
         try {
             SQLQueryMsgProducer SQLQueryMsgProducer = new SQLQueryMsgProducer();
             PhoneNumberLoader pnloader = new PhoneNumberLoader();
 
             // 회원정보DB API연동 및 데이터 처리
-            preOrderListManager.setPreOrderList(pnloader.addPhoneNumberToList(preOrderListManager.getPreOrderUserList()));
+            preOrderListManager.setPreorderUserList(pnloader.addPhoneNumberToList(preOrderListManager.getPreorderUserList()));
 
             // View 처리
             request.setAttribute("totalPreorder", pnloader.getTotalPreOrder());
@@ -55,7 +58,6 @@ public class AlimtalkServlet extends HttpServlet {
             request.setAttribute("withdraw", pnloader.getWithdrawUser());
             request.setAttribute("removed", pnloader.getWithdrawUser()+pnloader.getPhoneNumUnidentified());
             request.setAttribute("success", pnloader.getTotalPreOrder()-(pnloader.getWithdrawUser()+pnloader.getPhoneNumUnidentified()));
-            getServletContext().getRequestDispatcher("/WEB-INF/AlimResult.jsp").forward(request, response);
 
             UserInputInfoManager userInputInfoManager = UserInputInfoManager.getUserInputInfoManager();
             userInputInfoManager.putCouponInfo();
@@ -64,10 +66,12 @@ public class AlimtalkServlet extends HttpServlet {
             // Query 생성 후 MQ로 발송
             SQLQueryMsgProducer.sendQueryMsg(
                     AlimtalkDBConnectionManager.getManager(),
-                    preOrderListManager.getPreOrderUserList());
+                    preOrderListManager.getPreorderUserList());
             SQLQueryMsgProducer.sendQueryMsg(
                     PreorderDBConnectionManager.getManager(),
-                    preOrderListManager.getPreOrderUserList());
+                    preOrderListManager.getPreorderUserList());
+
+            getServletContext().getRequestDispatcher("/WEB-INF/AlimResult.jsp").forward(request, response);
 
         } catch (ParserConfigurationException e) {
             e.printStackTrace();

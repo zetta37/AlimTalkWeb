@@ -31,7 +31,7 @@ public class AlimtalkDBMsgConsumer implements ServletContextListener {
             rabbitMQConn = connectionFactory.newConnection();
             channel = rabbitMQConn.createChannel();
 
-            channel.queueDeclare(QUEUE_NAME, false, false, false, null);
+            channel.queueDeclare(QUEUE_NAME, true, false, true, null);      // Durable = true, exclusive = false, auto-delete = true, other properties = null
 
             Consumer consumer = new DefaultConsumer(channel){
 

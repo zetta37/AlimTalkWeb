@@ -21,7 +21,6 @@ public class SQLQueryMsgProducer {
 
     void sendQueryMsg(AlimtalkDBConnectionManager connectionManager, ArrayList<AlimMsgData> alimTalkMsgInfoTable) throws IOException, TimeoutException {
 
-        System.out.println("Sending Start - Alimtalk");
         String columns= AlimMsgData.ALIMTALK_COLUMN;
         String values;
         String message;
@@ -44,12 +43,10 @@ public class SQLQueryMsgProducer {
 
         channel.close();
         connection.close();
-        System.out.println("Sending END - Alimtalk");
     }
 
     void sendQueryMsg(PreorderDBConnectionManager connectionManager, ArrayList<AlimMsgData> alimMsgInfoTable) throws IOException, TimeoutException {
 
-        System.out.println("Sending Start - Preorder");
         String columns= AlimMsgData.PRE_ORDER_COLUMN;
         String values;
         String message;
@@ -59,7 +56,7 @@ public class SQLQueryMsgProducer {
         connectionFactory.setHost("localhost");
         com.rabbitmq.client.Connection connection = connectionFactory.newConnection();
         Channel channel = connection.createChannel();
-        channel.queueDeclare(PREORDERDB_QUEUE, false, false, false, null);
+        channel.queueDeclare(PREORDERDB_QUEUE, true, false, true, null);        // Durable = true, exclusive = false, auto-delete = true, other properties = null
 
         // 알림갯수 전송
         String msgCount = alimMsgInfoTable.size()+"";
@@ -73,7 +70,6 @@ public class SQLQueryMsgProducer {
 
         channel.close();
         connection.close();
-        System.out.println("Sending END - Preorder");
     }
 
 //    boolean isDone(){

@@ -60,7 +60,6 @@ public class PhoneNumberLoader {
             NodeList nodelist = document.getElementsByTagName("cphone");
             Node textNode = nodelist.item(0).getChildNodes().item(0);
             result = textNode.getNodeValue();
-//            System.out.println(userID+": " + result);
         } catch(SAXParseException e){
             withdrawUser++;
             return null;
